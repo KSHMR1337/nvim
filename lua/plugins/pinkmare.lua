@@ -3,8 +3,8 @@ return {
 	lazy = false,
 	priority = 999,
 	config = function()
-		vim.cmd("let pinkmare_transparent_background = 1")
-		vim.cmd("colorscheme pinkmare")
+		-- vim.cmd("let pinkmare_transparent_background = 1")
+		-- vim.cmd("colorscheme pinkmare")
         -- vim.cmd("let target='NormalFloat' | if (has('termguicolors') && &termguicolors) || has('gui_running') | hi target guifg=#F2447A guibg=#202330 | elseif exists('*s:t_Co') && s:t_Co >= 256 | hi target ctermfg=223 ctermbg=235 | else | hi target ctermfg=White ctermbg=Black | endif")
         -- vim.cmd("let s:target=\"NormalFloat\" | if (has('termguicolors') && &termguicolors) || has('gui_running') | hi s:target guifg=#F2447A guibg=#202330 | elseif exists('*s:t_Co') && s:t_Co >= 256 | hi s:target ctermfg=223 ctermbg=235 | else | hi s:target ctermfg=White ctermbg=Black | endif")
         -- Purple fg and NONE bg
