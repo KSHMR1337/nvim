@@ -1,41 +1,41 @@
 local colors = {
-	black = "#251414",
+	black = "#141425",
 	blue = "#80a0ff",
 	green = "#9ece6a",
 	yellow = "#e0af68",
-	red = "#7B0323",
-	winered = "#ff5151",
-	bloodred = "#880808",
-	carmine = "#D70040",
-	crimson = "#DC143C",
+	red = "#ff5189",
+	purple = "#ad8ee6",
+	violet = "#d183e8",
+	amethyst = "#9966cc",
+	magenta = "#FF00FF",
 	grey = "#303030",
-	bg_gutter = "#6b2020",
-	fg_statusline = "#d6a9b1",
-	bg_statusline = "#361010",
-	fg_sidebar = "#ff0000",
+	bg_gutter = "#443454",
+	fg_statusline = "#a9b1d6",
+	bg_statusline = "#322333",
+	fg_sidebar = "#a9b1d6",
 }
 
-local cyber_meltdown = {
+local purple_rain = {
 
 	normal = {
-		a = { bg = colors.winered, fg = colors.black },
-		b = { bg = colors.bg_gutter, fg = colors.winered},
+		a = { bg = colors.purple, fg = colors.black },
+		b = { bg = colors.bg_gutter, fg = colors.purple },
 		c = { bg = colors.bg_statusline, fg = colors.fg_sidebar },
 	},
 
 	insert = {
-		a = { bg = colors.bloodred, fg = colors.black },
-		b = { bg = colors.bg_gutter, fg = colors.bloodred },
+		a = { bg = colors.violet, fg = colors.black },
+		b = { bg = colors.bg_gutter, fg = colors.violet },
 	},
 
 	command = {
-		a = { bg = colors.carmine, fg = colors.black },
-		b = { bg = colors.bg_gutter, fg = colors.carmine },
+		a = { bg = colors.amethyst, fg = colors.black },
+		b = { bg = colors.bg_gutter, fg = colors.amethyst },
 	},
 
 	visual = {
-		a = { bg = colors.crimson, fg = colors.black },
-		b = { bg = colors.bg_gutter, fg = colors.crimson },
+		a = { bg = colors.magenta, fg = colors.black },
+		b = { bg = colors.bg_gutter, fg = colors.magenta },
 	},
 
 	replace = {
@@ -56,7 +56,7 @@ local config = function()
 
 	require("lualine").setup({
 		options = {
-			theme = cyber_meltdown,
+			theme = purple_rain,
 			globalstatus = true,
 			component_separators = { left = "|", right = "|" },
 			section_separators = { left = "", right = "" },
