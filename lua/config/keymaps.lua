@@ -42,3 +42,7 @@ vim.api.nvim_set_keymap("v", "<C-_>", "gcc", { noremap = false })
 
 -- Tagbar
 mapkey("<F8>", "TagbarToggle<CR>", "n") -- Toggle Tagbar
+
+-- fzf
+
+mapkey("<C-p>", "FzfLua files", "n", { silent = true })
