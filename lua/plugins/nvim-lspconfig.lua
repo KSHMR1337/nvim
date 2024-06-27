@@ -1,11 +1,57 @@
 local on_attach = require("util.lsp").on_attach
 local diagnostic_signs = require("util.icons").diagnostic_signs
+local typescript_organise_imports = require("util.lsp").typescript_organise_imports
 
 local config = function()
 	require("neoconf").setup({})
 	local cmp_nvim_lsp = require("cmp_nvim_lsp")
 	local lspconfig = require("lspconfig")
 	local capabilities = cmp_nvim_lsp.default_capabilities()
+
+    
+	-- -- used to enable autocompletion (assign to every lsp server config)
+	-- local capabilities = cmp_nvim_lsp.default_capabilities()
+
+	-- -- enable keybinds only for when lsp server available
+	-- local on_attach = function(client, bufnr)
+	-- 	-- keybind options
+	-- 	local opts = { noremap = true, silent = true, buffer = bufnr }
+
+	-- 	-- set keybinds
+	-- 	vim.keymap.set("n", "gf", "<cmd>Lspsaga lsp_finder<CR>", opts) -- show definition, references
+	-- 	vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
+	-- 	vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
+	-- 	vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- go to implementation
+	-- 	vim.keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", opts) -- see available code actions
+	-- 	vim.keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
+	-- 	vim.keymap.set("n", "<leader>D", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
+	-- 	vim.keymap.set("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
+	-- 	vim.keymap.set("n", "<leader>pd", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to prev diagnostic in buffer
+	-- 	vim.keymap.set("n", "<leader>nd", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
+	-- 	vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
+	-- 	vim.keymap.set("n", "<leader>lo", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
+
+	-- 	-- typescript specific vim.keymaps (e.g. rename file and update imports)
+	-- 	if client.name == "tsserver" then
+	-- 		vim.keymap.set("n", "<leader>gD", ":TypescriptGoToSourceDefinition<CR>") -- go to definition
+	-- 		vim.keymap.set("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
+	-- 		vim.keymap.set("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports
+	-- 		vim.keymap.set("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables
+	-- 	end
+
+	-- 	if client.name == "solidity" then
+	-- 		vim.keymap.set("n", "<leader>gD", ":Lspsaga goto_definition <CR>") -- go to definition
+	-- 	end
+
+	-- 	if client.name == "pyright" then
+	-- 		vim.keymap.set("n", "<Leader>oi", "<cmd>PyrightOrganizeImports<CR>", {
+	-- 			buffer = bufnr,
+	-- 			silent = true,
+	-- 			noremap = true,
+	-- 		})
+	-- 	end
+	-- end
+
 
 	for type, icon in pairs(diagnostic_signs) do
 		local hl = "DiagnosticSign" .. type
@@ -23,10 +69,9 @@ local config = function()
 					globals = { "vim" },
 				},
 				workspace = {
-					-- make language server aware of runtime files
 					library = {
-						[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-						[vim.fn.stdpath("config") .. "/lua"] = true,
+						vim.fn.expand("$VIMRUNTIME/lua"),
+						vim.fn.expand("$XDG_CONFIG_HOME") .. "/nvim/lua",
 					},
 				},
 			},
@@ -66,6 +111,15 @@ local config = function()
 			"javascript",
 			"typescriptreact",
 			"javascriptreact",
+		},
+		commands = {
+			TypeScriptOrganizeImports = typescript_organise_imports,
+		},
+		settings = {
+			typescript = {
+				indentStyle = "space",
+				indentSize = 2,
+			},
 		},
 		root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
 	})
@@ -108,6 +162,16 @@ local config = function()
 		on_attach = on_attach,
 	})
 
+	-- C/C++
+	lspconfig.clangd.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+		cmd = {
+			"clangd",
+			"--offset-encoding=utf-16",
+		},
+	})
+
 	local luacheck = require("efmls-configs.linters.luacheck")
 	local stylua = require("efmls-configs.formatters.stylua")
 	local flake8 = require("efmls-configs.linters.flake8")
@@ -119,6 +183,8 @@ local config = function()
 	local shfmt = require("efmls-configs.formatters.shfmt")
 	local hadolint = require("efmls-configs.linters.hadolint")
 	local solhint = require("efmls-configs.linters.solhint")
+	local cpplint = require("efmls-configs.linters.cpplint")
+	local clangformat = require("efmls-configs.formatters.clang_format")
 
 	-- configure efm server
 	lspconfig.efm.setup({
@@ -139,6 +205,8 @@ local config = function()
 			"solidity",
 			"html",
 			"css",
+			"c",
+			"cpp",
 		},
 		init_options = {
 			documentFormatting = true,
@@ -166,6 +234,8 @@ local config = function()
 				solidity = { solhint },
 				html = { prettier_d },
 				css = { prettier_d },
+				c = { clangformat, cpplint },
+				cpp = { clangformat, cpplint },
 			},
 		},
 	})

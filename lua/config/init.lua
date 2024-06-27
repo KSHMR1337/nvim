@@ -21,7 +21,7 @@ local opts = {
         lazy = true,
     },
     install = {
-        colorscheme = { "shades_of_purple" }
+        colorscheme = { "pinkmare" }
     },
     rtp = {
         disabled_plugins = {

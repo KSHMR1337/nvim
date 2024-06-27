@@ -29,5 +29,4 @@ M.on_attach = function(client, bufnr)
 	end
 end
 
-
 return M
