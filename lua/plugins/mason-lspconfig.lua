@@ -9,6 +9,7 @@ local opts = {
 		"lua_ls",
 		"emmet_ls",
 		"jsonls",
+		"clangd",
 	},
 
 	automatic_installation = true,

@@ -1,4 +1,4 @@
-local mapkey = require("util.keymapper").mapkey
+local mapkey = require("util.keymapper").mapvimkey
 
 -- Buffer Navigation
 mapkey("<leader>bn", "bnext", "n") -- Next buffer
@@ -44,4 +44,5 @@ vim.api.nvim_set_keymap("v", "<C-_>", "gcc", { noremap = false })
 mapkey("<F8>", "TagbarToggle<CR>", "n") -- Toggle Tagbar
 
 -- fzf
+
 mapkey("<C-p>", "FzfLua files", "n", { silent = true })
