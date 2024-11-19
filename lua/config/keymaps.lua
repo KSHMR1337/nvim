@@ -46,3 +46,22 @@ mapkey("<F8>", "TagbarToggle<CR>", "n") -- Toggle Tagbar
 -- fzf
 
 mapkey("<C-p>", "FzfLua files", "n", { silent = true })
+
+-- Delete, change and replace without copying into register
+mapkey("D", 'normal! "_D', "n", { noremap = true, silent = true })
+mapkey("C", 'normal! "_C', "n", { noremap = true, silent = true })
+mapkey("S", 'normal! "_S', "n", { noremap = true, silent = true })
+mapkey("X", 'normal! "_X', "n", { noremap = true, silent = true })
+mapkey("D", 'normal! "_D', "v", { noremap = true, silent = true })
+mapkey("C", 'normal! "_C', "v", { noremap = true, silent = true })
+mapkey("S", 'normal! "_S', "v", { noremap = true, silent = true })
+mapkey("X", 'normal! "_X', "v", { noremap = true, silent = true })
+mapkey("P", 'normal! "_dP', "v", { noremap = true, silent = true })
+mapkey("dd", 'normal! "_dd', "n", { noremap = true, silent = true })
+mapkey("cc", 'normal! "_cc', "n", { noremap = true, silent = true })
+mapkey("ss", 'normal! "_ss', "n", { noremap = true, silent = true })
+mapkey("x", 'normal! "_x', "n", { noremap = true, silent = true })
+mapkey("d", 'normal! "_d', "v", { noremap = true, silent = true })
+mapkey("c", 'normal! "_c', "v", { noremap = true, silent = true })
+mapkey("x", 'normal! "_x', "v", { noremap = true, silent = true })
+mapkey("p", 'normal! "_dp', "v", { noremap = true, silent = true })
