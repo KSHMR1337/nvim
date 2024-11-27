@@ -4,9 +4,7 @@ return {
 	priority = 999,
 	config = function()
 		vim.cmd("let pinkmare_transparent_background = 1")
-		-- vim.cmd("colorscheme pinkmare")
-        -- vim.cmd("let target='NormalFloat' | if (has('termguicolors') && &termguicolors) || has('gui_running') | hi target guifg=#e32020 guibg=#202330 | elseif exists('*s:t_Co') && s:t_Co >= 256 | hi target ctermfg=223 ctermbg=235 | else | hi target ctermfg=White ctermbg=Black | endif")
-        -- vim.cmd("let s:target=\"NormalFloat\" | if (has('termguicolors') && &termguicolors) || has('gui_running') | hi s:target guifg=#e32020 guibg=#202330 | elseif exists('*s:t_Co') && s:t_Co >= 256 | hi s:target ctermfg=223 ctermbg=235 | else | hi s:target ctermfg=White ctermbg=Black | endif")
+		vim.cmd("colorscheme pinkmare")
         -- Purple fg and NONE bg
         vim.cmd("let s:myGroup = \"Terminal\" | execute 'hi' (has('termguicolors') && &termguicolors) || has('gui_running') ? s:myGroup.' guifg=#e32020 guibg=NONE' : exists('*s:t_Co') && s:t_Co >= 256 ? s:myGroup.' ctermfg=223 ctermbg=NONE' : s:myGroup.' ctermfg=White ctermbg=NONE'")
         vim.cmd("let s:myGroup = \"SignColumn\" | execute 'hi' (has('termguicolors') && &termguicolors) || has('gui_running') ? s:myGroup.' guifg=#e32020 guibg=NONE' : exists('*s:t_Co') && s:t_Co >= 256 ? s:myGroup.' ctermfg=223 ctermbg=NONE' : s:myGroup.' ctermfg=White ctermbg=NONE'")
@@ -45,5 +43,7 @@ return {
         vim.cmd("let s:myGroup = \"Normal\" | execute 'hi' (has('termguicolors') && &termguicolors) || has('gui_running') ? s:myGroup.' guifg=#ad55aa guibg=NONE' : exists('*s:t_Co') && s:t_Co >= 256 ? s:myGroup.' ctermfg=56 ctermbg=NONE' : s:myGroup.' ctermfg=Purple ctermbg=NONE'")
         vim.cmd("let s:myGroup = \"Directory\" | execute 'hi' (has('termguicolors') && &termguicolors) || has('gui_running') ? s:myGroup.' guifg=#f2448b guibg=NONE' : exists('*s:t_Co') && s:t_Co >= 256 ? s:myGroup.' ctermfg=52 ctermbg=NONE' : s:myGroup.' ctermfg=DarkRed ctermbg=NONE'")
         vim.cmd("let s:myGroup = \"Constant\" | execute 'hi' (has('termguicolors') && &termguicolors) || has('gui_running') ? s:myGroup.' guifg=#d9bcef guibg=NONE' : exists('*s:t_Co') && s:t_Co >= 256 ? s:myGroup.' ctermfg=175 ctermbg=NONE' : s:myGroup.' ctermfg=Magenta ctermbg=NONE'")
+        -- Color line numbers
+        vim.cmd("let s:myGroup = \"LineNr\" | execute 'hi' (has('termguicolors') && &termguicolors) || has('gui_running') ? s:myGroup.' guifg=#f2448b guibg=NONE' : exists('*s:t_Co') && s:t_Co >= 256 ? s:myGroup.' ctermfg=204 ctermbg=NONE' : s:myGroup.' ctermfg=DarkRed ctermbg=NONE'")
 	end,
 }
