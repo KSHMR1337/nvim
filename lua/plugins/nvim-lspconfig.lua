@@ -32,7 +32,7 @@ local config = function()
 	-- 	vim.keymap.set("n", "<leader>lo", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
 
 	-- 	-- typescript specific vim.keymaps (e.g. rename file and update imports)
-	-- 	if client.name == "tsserver" then
+	-- 	if client.name == "ts_ls" then
 	-- 		vim.keymap.set("n", "<leader>gD", ":TypescriptGoToSourceDefinition<CR>") -- go to definition
 	-- 		vim.keymap.set("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
 	-- 		vim.keymap.set("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports
@@ -103,7 +103,7 @@ local config = function()
 	})
 
 	-- typescript
-	lspconfig.tsserver.setup({
+	lspconfig.ts_ls.setup({
 		on_attach = on_attach,
 		capabilities = capabilities,
 		filetypes = {
