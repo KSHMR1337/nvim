@@ -5,7 +5,7 @@ local colors = {
 	yellow = "#e0af68",
 	red = "#7B0323",
 	winered = "#ff5151",
-	bloodred = "#880808",
+	bloodred = "#FF3131",
 	carmine = "#D70040",
 	crimson = "#DC143C",
 	grey = "#303030",
@@ -19,7 +19,7 @@ local cyber_meltdown = {
 
 	normal = {
 		a = { bg = colors.winered, fg = colors.black },
-		b = { bg = colors.bg_gutter, fg = colors.winered},
+		b = { bg = colors.bg_gutter, fg = colors.winered },
 		c = { bg = colors.bg_statusline, fg = colors.fg_sidebar },
 	},
 
