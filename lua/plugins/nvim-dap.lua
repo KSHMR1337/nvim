@@ -2,9 +2,48 @@ local debugging_signs = require("util.icons").debugging_signs
 
 return {
 	"mfussenegger/nvim-dap",
+    dependencies = {
+	  "nvim-neotest/nvim-nio",
+      "rcarriga/nvim-dap-ui",
+      "mfussenegger/nvim-dap-python",
+      "theHamsta/nvim-dap-virtual-text",
+    },
 	config = function()
 		local dap = require("dap")
 		local dapui = require("dapui")
+
+        local dap_python = require("dap-python")
+
+        require("dapui").setup({})
+        require("nvim-dap-virtual-text").setup({
+
+            commented = true, -- Show virtual text alongside comment
+
+        })
+
+        dap_python.setup("python3")
+
+
+        vim.fn.sign_define("DapBreakpoint", {
+            text = "",
+            texthl = "DiagnosticSignError",
+            linehl = "",
+            numhl = "",
+        })
+
+        vim.fn.sign_define("DapBreakpointRejected", {
+            text = "", -- or "❌"
+            texthl = "DiagnosticSignError",
+            linehl = "",
+            numhl = "",
+        })
+
+        vim.fn.sign_define("DapStopped", {
+            text = "", -- or "→"
+            texthl = "DiagnosticSignWarn",
+            linehl = "Visual",
+            numhl = "DiagnosticSignWarn",
+        })
 
 		-- set custom icons
 		for name, sign in pairs(debugging_signs) do
@@ -15,25 +54,19 @@ return {
 			)
 		end
 
-		-- setup dap
-		dapui.setup()
-
 		-- add event listeners
 		dap.listeners.after.event_initialized["dapui_config"] = function()
 			dapui.open()
-			vim.cmd("Hardtime disable")
-			vim.cmd("NvimTreeClose")
 		end
 
 		dap.listeners.before.event_terminated["dapui_config"] = function()
 			dapui.close()
-			vim.cmd("Hardtime enable")
 		end
 
 		dap.listeners.before.event_exited["dapui_config"] = function()
 			dapui.close()
-			vim.cmd("Hardtime enable")
 		end
 	end,
-	dependencies = "rcarriga/nvim-dap-ui",
 }
+
+
