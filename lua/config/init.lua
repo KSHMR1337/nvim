@@ -5,7 +5,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
@@ -19,9 +19,6 @@ require('config.autocmds')
 local opts = {
     defaults = {
         lazy = true,
-    },
-    install = {
-        colorscheme = { "shades_of_purple" }
     },
     rtp = {
         disabled_plugins = {
@@ -42,5 +39,4 @@ local opts = {
 }
 
 require("lazy").setup('plugins', opts)
-
 

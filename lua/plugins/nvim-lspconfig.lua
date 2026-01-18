@@ -5,66 +5,25 @@ local typescript_organise_imports = require("util.lsp").typescript_organise_impo
 local config = function()
 	require("neoconf").setup({})
 	local cmp_nvim_lsp = require("cmp_nvim_lsp")
-	local lspconfig = require("lspconfig")
 	local capabilities = cmp_nvim_lsp.default_capabilities()
-
-    
-	-- -- used to enable autocompletion (assign to every lsp server config)
-	-- local capabilities = cmp_nvim_lsp.default_capabilities()
-
-	-- -- enable keybinds only for when lsp server available
-	-- local on_attach = function(client, bufnr)
-	-- 	-- keybind options
-	-- 	local opts = { noremap = true, silent = true, buffer = bufnr }
-
-	-- 	-- set keybinds
-	-- 	vim.keymap.set("n", "gf", "<cmd>Lspsaga lsp_finder<CR>", opts) -- show definition, references
-	-- 	vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
-	-- 	vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
-	-- 	vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- go to implementation
-	-- 	vim.keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", opts) -- see available code actions
-	-- 	vim.keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
-	-- 	vim.keymap.set("n", "<leader>D", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
-	-- 	vim.keymap.set("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
-	-- 	vim.keymap.set("n", "<leader>pd", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to prev diagnostic in buffer
-	-- 	vim.keymap.set("n", "<leader>nd", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
-	-- 	vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
-	-- 	vim.keymap.set("n", "<leader>lo", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
-
-	-- 	-- typescript specific vim.keymaps (e.g. rename file and update imports)
-	-- 	if client.name == "tsserver" then
-	-- 		vim.keymap.set("n", "<leader>gD", ":TypescriptGoToSourceDefinition<CR>") -- go to definition
-	-- 		vim.keymap.set("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
-	-- 		vim.keymap.set("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports
-	-- 		vim.keymap.set("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables
-	-- 	end
-
-	-- 	if client.name == "solidity" then
-	-- 		vim.keymap.set("n", "<leader>gD", ":Lspsaga goto_definition <CR>") -- go to definition
-	-- 	end
-
-	-- 	if client.name == "pyright" then
-	-- 		vim.keymap.set("n", "<Leader>oi", "<cmd>PyrightOrganizeImports<CR>", {
-	-- 			buffer = bufnr,
-	-- 			silent = true,
-	-- 			noremap = true,
-	-- 		})
-	-- 	end
-	-- end
-
 
 	for type, icon in pairs(diagnostic_signs) do
 		local hl = "DiagnosticSign" .. type
 		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 	end
 
-	-- lua
-	lspconfig.lua_ls.setup({
+	vim.api.nvim_create_autocmd("LspAttach", {
+		callback = function(args)
+			local bufnr = args.buf
+			local client = vim.lsp.get_client_by_id(args.data.client_id)
+			on_attach(client, bufnr)
+		end,
+	})
+
+	vim.lsp.config.lua_ls = {
 		capabilities = capabilities,
-		on_attach = on_attach,
-		settings = { -- custom settings for lua
+		settings = {
 			Lua = {
-				-- make the language server recognize "vim" global
 				diagnostics = {
 					globals = { "vim" },
 				},
@@ -76,19 +35,15 @@ local config = function()
 				},
 			},
 		},
-	})
+	}
 
-	-- json
-	lspconfig.jsonls.setup({
+	vim.lsp.config.jsonls = {
 		capabilities = capabilities,
-		on_attach = on_attach,
 		filetypes = { "json", "jsonc" },
-	})
+	}
 
-	-- python
-	lspconfig.pyright.setup({
+	vim.lsp.config.pyright = {
 		capabilities = capabilities,
-		on_attach = on_attach,
 		settings = {
 			pyright = {
 				disableOrganizeImports = false,
@@ -100,11 +55,9 @@ local config = function()
 				},
 			},
 		},
-	})
+	}
 
-	-- typescript
-	lspconfig.tsserver.setup({
-		on_attach = on_attach,
+	vim.lsp.config.ts_ls = {
 		capabilities = capabilities,
 		filetypes = {
 			"typescript",
@@ -121,27 +74,21 @@ local config = function()
 				indentSize = 2,
 			},
 		},
-		root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
-	})
+		root_markers = { "package.json", "tsconfig.json", ".git" },
+	}
 
-	-- bash
-	lspconfig.bashls.setup({
+	vim.lsp.config.bashls = {
 		capabilities = capabilities,
-		on_attach = on_attach,
 		filetypes = { "sh", "aliasrc" },
-	})
+	}
 
-	-- solidity
-	lspconfig.solidity.setup({
+	vim.lsp.config.solidity_ls = {
 		capabilities = capabilities,
-		on_attach = on_attach,
 		filetypes = { "solidity" },
-	})
+	}
 
-	-- typescriptreact, javascriptreact, css, sass, scss, less, svelte, vue
-	lspconfig.emmet_ls.setup({
+	vim.lsp.config.emmet_ls = {
 		capabilities = capabilities,
-		on_attach = on_attach,
 		filetypes = {
 			"typescriptreact",
 			"javascriptreact",
@@ -154,23 +101,66 @@ local config = function()
 			"vue",
 			"html",
 		},
-	})
+	}
 
-	-- docker
-	lspconfig.dockerls.setup({
+	vim.lsp.config.dockerls = {
 		capabilities = capabilities,
-		on_attach = on_attach,
-	})
+	}
 
-	-- C/C++
-	lspconfig.clangd.setup({
+	vim.lsp.config.lemminx = {
 		capabilities = capabilities,
-		on_attach = on_attach,
+		filetypes = { "xml", "xsd", "xsl", "xslt", "svg" },
+	}
+
+	vim.lsp.config.powershell_es = {
+		capabilities = capabilities,
+		filetypes = { "ps1", "psm1", "psd1" },
+		settings = {
+			powershell = {
+				codeFormatting = {
+					autoCorrectAliases = true,
+					preset = "OTBS",
+					openBraceOnSameLine = true,
+					newLineAfterOpenBrace = true,
+					newLineAfterCloseBrace = true,
+					pipelineIndentationStyle = "IncreaseIndentationForFirstPipeline",
+					whitespaceBeforeOpenBrace = true,
+					whitespaceBeforeOpenParen = true,
+					whitespaceAroundOperator = true,
+					whitespaceAfterSeparator = true,
+					whitespaceBetweenParameters = false,
+					whitespaceInsideBrace = true,
+					addWhitespaceAroundPipe = true,
+				},
+				scriptAnalysis = {
+					enable = true,
+				},
+			},
+		},
+	}
+
+	vim.lsp.config.clangd = {
+		capabilities = capabilities,
 		cmd = {
 			"clangd",
 			"--offset-encoding=utf-16",
 		},
-	})
+	}
+
+	vim.lsp.config.intelephense = {
+		capabilities = capabilities,
+		filetypes = { "php" },
+		settings = {
+			intelephense = {
+				files = {
+					maxSize = 1000000,
+				},
+				format = {
+					enable = true,
+				},
+			},
+		},
+	}
 
 	local luacheck = require("efmls-configs.linters.luacheck")
 	local stylua = require("efmls-configs.formatters.stylua")
@@ -185,9 +175,9 @@ local config = function()
 	local solhint = require("efmls-configs.linters.solhint")
 	local cpplint = require("efmls-configs.linters.cpplint")
 	local clangformat = require("efmls-configs.formatters.clang_format")
+	local rustfmt = require("efmls-configs.formatters.rustfmt")
 
-	-- configure efm server
-	lspconfig.efm.setup({
+	vim.lsp.config.efm = {
 		filetypes = {
 			"lua",
 			"python",
@@ -205,8 +195,9 @@ local config = function()
 			"solidity",
 			"html",
 			"css",
-			"c",
-			"cpp",
+			"rust",
+			"dosbatch",
+			"vb",
 		},
 		init_options = {
 			documentFormatting = true,
@@ -221,8 +212,8 @@ local config = function()
 				lua = { luacheck, stylua },
 				python = { flake8, black },
 				typescript = { eslint, prettier_d },
-				json = { eslint, fixjson },
-				jsonc = { eslint, fixjson },
+				json = { fixjson },
+				jsonc = { fixjson },
 				sh = { shellcheck, shfmt },
 				javascript = { eslint, prettier_d },
 				javascriptreact = { eslint, prettier_d },
@@ -231,13 +222,71 @@ local config = function()
 				vue = { eslint, prettier_d },
 				markdown = { prettier_d },
 				docker = { hadolint, prettier_d },
-				solidity = { solhint },
+				solidity = { solhint, prettier_d },
 				html = { prettier_d },
 				css = { prettier_d },
-				c = { clangformat, cpplint },
-				cpp = { clangformat, cpplint },
+				rust = { rustfmt },
+				dosbatch = { prettier_d },
+				vb = { prettier_d },
 			},
 		},
+	}
+
+	vim.lsp.enable({
+		"lua_ls",
+		"jsonls",
+		"pyright",
+		"ts_ls",
+		"bashls",
+		"solidity_ls",
+		"emmet_ls",
+		"dockerls",
+		"lemminx",
+		"clangd",
+		"intelephense",
+		"efm",
+	})
+
+	vim.api.nvim_create_autocmd("FileType", {
+		pattern = { "ps1", "psm1", "psd1" },
+		callback = function()
+			local ok, mason_registry = pcall(require, "mason-registry")
+			if not ok then
+				return
+			end
+
+			if not mason_registry.has_package("powershell-editor-services") then
+				return
+			end
+
+			local pkg_ok, pkg = pcall(mason_registry.get_package, "powershell-editor-services")
+			if not pkg_ok or not pkg then
+				return
+			end
+
+			local path_ok, powershell_es_path = pcall(pkg.get_install_path, pkg)
+			if not path_ok or not powershell_es_path then
+				return
+			end
+
+			local config = vim.tbl_deep_extend("force", vim.lsp.config.powershell_es, {
+				cmd = {
+					"pwsh",
+					"-NoLogo",
+					"-NoProfile",
+					"-Command",
+					string.format(
+						"& '%s/PowerShellEditorServices/Start-EditorServices.ps1' -BundledModulesPath '%s' -LogPath '%s/powershell_es.log' -SessionDetailsPath '%s/powershell_es.session.json' -FeatureFlags @() -AdditionalModules @() -HostName nvim -HostProfileId 0 -HostVersion 1.0.0 -Stdio -LogLevel Normal",
+						powershell_es_path,
+						powershell_es_path,
+						vim.fn.stdpath("cache"),
+						vim.fn.stdpath("cache")
+					),
+				}
+			})
+
+			vim.lsp.start(config)
+		end,
 	})
 end
 
@@ -254,3 +303,4 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 	},
 }
+

@@ -22,11 +22,27 @@ M.on_attach = function(client, bufnr)
 		mapkey("<leader>db", "DapToggleBreakpoint", "n", opts) -- toggle breakpoint
 		mapkey("<leader>dr", "DapContinue", "n", opts) -- continue/invoke debugger
 		mapkey("<leader>dt", "lua require('dap-python').test_method()", "n", opts) -- run tests
+        mapkey("<leader>dc", "DapContinue", "n", opts)        -- continue / start
+        mapkey("<leader>do", "DapStepOver", "n", opts)        -- step over
+        mapkey("<leader>di", "DapStepInto", "n", opts)        -- step into
+        mapkey("<leader>dO", "DapStepOut", "n", opts)         -- step out
+        mapkey("<leader>dq", "DapTerminate", "n", opts)       -- terminate debugging
+        mapkey("<leader>du", "DapUIToggle", "n", opts)        -- toggle DAP UI
 	end
 
-	if client.name == "tsserver" then
+	if client.name == "ts_ls" then
 		mapkey("<leader>oi", "TypeScriptOrganizeImports", "n", opts) -- organise imports
 	end
 end
+
+M.typescript_organise_imports = {
+	function()
+		vim.lsp.buf.execute_command({
+			command = "_typescript.organizeImports",
+			arguments = { vim.api.nvim_buf_get_name(0) },
+		})
+	end,
+	description = "Organize Imports",
+}
 
 return M

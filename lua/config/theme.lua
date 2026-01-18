@@ -1,0 +1,1 @@
+/home/kshmr/.local/share/themes/synthwave/nvim.lua
